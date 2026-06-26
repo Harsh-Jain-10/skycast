@@ -14,6 +14,18 @@
 
 <br />
 
+<!-- Row of Animated Weather SVGs representing atmospheric conditions -->
+<div align="center">
+  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/clear-day.svg" width="75" alt="Clear Day" />
+  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/cloudy.svg" width="75" alt="Cloudy" />
+  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/rain.svg" width="75" alt="Rain" />
+  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/thunderstorms.svg" width="75" alt="Thunderstorms" />
+  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/snow.svg" width="75" alt="Snow" />
+  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/wind.svg" width="75" alt="Wind" />
+</div>
+
+<br />
+
 <!-- Badges Grid -->
 [![GitHub Version](https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge&logo=git&logoColor=white)](https://github.com/Harsh-Jain-10/skycast)
 [![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge&logo=open-source-initiative&logoColor=white)](https://github.com/Harsh-Jain-10/skycast/blob/main/LICENSE)
@@ -35,10 +47,6 @@
 
 <br />
 <br />
-
-<!-- Immersive Video Showcase Banner -->
-<h3>✨ App in Motion — Visual Showcase ✨</h3>
-<img src="./docs/screenshots/demo.webp" width="90%" style="border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 50px rgba(0,0,0,0.5);" alt="SkyCast Visual Demo" />
 
 </div>
 
@@ -63,23 +71,6 @@ By integrating a dual-engine AI pipeline (Gemini / Groq) with caching mechanisms
 | **Sleek Analytics** | 24h bezier lines, rain likelihood probability bars, and year-over-year historical climate | Highly transparent area charts |
 | **Local Cache DB** | Database caching logic storing coordinate results and histories for 15 minutes | Zero API limits exhaustion |
 | **Comparison Matrix** | Parallel coordinate querying to compare stats side-by-side without layout shifts | 3-Column comparing grids |
-
----
-
-## 🎨 Project Preview
-
-### Desktop Dashboard View
-<img src="./docs/screenshots/dashboard.png" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);" alt="SkyCast Desktop Dashboard" />
-
-<br />
-
-### Saved Favorites Grid
-<img src="./docs/screenshots/favorites.png" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);" alt="Saved Favorites Dashboard" />
-
-<br />
-
-### Comparative Matrix View
-<img src="./docs/screenshots/compare.png" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);" alt="Comparative Matrix View" />
 
 ---
 
@@ -127,19 +118,16 @@ Skycast/
 │   ├── requirements.txt       # Python package list
 │   └── venv/                  # Python Virtual environment (Local only)
 │
-├── frontend/                  # Vite React Frontend Application
-│   ├── src/
-│   │   ├── components/        # WeatherBackground, MetricCard, WeatherCharts, Navbar
-│   │   ├── pages/             # Home, Favorites, Compare
-│   │   ├── types/             # Common TypeScript interfaces
-│   │   ├── App.tsx            # Main Application entry and theme variables manager
-│   │   ├── index.css          # Styling variables, custom scrolls, responsive grids
-│   │   └── main.tsx           # React DOM root renderer
-│   ├── package.json           # Frontend package descriptors
-│   └── vite.config.ts         # Vite bundler rules & aliases
-│
-└── docs/                      # Screen recordings and verification assets
-    └── screenshots/
+└── frontend/                  # Vite React Frontend Application
+    ├── src/
+    │   ├── components/        # WeatherBackground, MetricCard, WeatherCharts, Navbar
+    │   ├── pages/             # Home, Favorites, Compare
+    │   ├── types/             # Common TypeScript interfaces
+    │   ├── App.tsx            # Main Application entry and theme variables manager
+    │   ├── index.css          # Styling variables, custom scrolls, responsive grids
+    │   └── main.tsx           # React DOM root renderer
+    ├── package.json           # Frontend package descriptors
+    └── vite.config.ts         # Vite bundler rules & aliases
 ```
 
 ---
@@ -253,7 +241,6 @@ Thank you for exploring **SkyCast**! This project represents my dedication to en
 <!-- Interactive Contact Badges -->
 [![GitHub Profile](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Harsh-Jain-10)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/harsh-jain-10/)
-[![Portfolio](https://img.shields.io/badge/Portfolio-0052CC?style=for-the-badge&logo=atlassian&logoColor=white)](https://github.com/Harsh-Jain-10)
 [![Email Contact](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:harsh.jainm1003@gmail.com)
 
 <br />
