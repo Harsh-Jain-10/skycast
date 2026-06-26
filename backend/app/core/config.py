@@ -1,5 +1,4 @@
-from pydantic import SettingsConfigDict
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Skycast AI Weather Platform"

@@ -18,7 +18,7 @@ export const Compare: React.FC = () => {
     setError(null);
     try {
       const promises = activeQueries.map(async (query) => {
-        const res = await fetch(`http://localhost:8000/api/weather?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`http://localhost:8000/api/weather?q=${encodeURIComponent(query)}&exclude_ai=true`);
         if (!res.ok) {
           throw new Error(`Failed to load data for '${query}'`);
         }

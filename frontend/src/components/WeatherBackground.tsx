@@ -251,7 +251,7 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = ({ weatherCod
       )}
 
       {/* Particle Canvas */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block pointer-events-none" />
     </div>
   );
 };

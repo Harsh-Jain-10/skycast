@@ -73,7 +73,13 @@ class AIService:
                                 ),
                                 "outdoor_activities": types.Schema(
                                     type=types.Type.OBJECT,
-                                    additional_properties=types.Schema(type=types.Type.STRING)
+                                    properties={
+                                        "Running": types.Schema(type=types.Type.STRING),
+                                        "Cycling": types.Schema(type=types.Type.STRING),
+                                        "Hiking": types.Schema(type=types.Type.STRING),
+                                        "Golf": types.Schema(type=types.Type.STRING),
+                                    },
+                                    required=["Running", "Cycling", "Hiking", "Golf"]
                                 ),
                                 "travel_advice": types.Schema(type=types.Type.STRING),
                                 "agricultural_tips": types.Schema(type=types.Type.STRING),

@@ -13,6 +13,7 @@ def get_weather_data(
     q: str = Query(None, description="City name to search"),
     lat: float = Query(None, description="Latitude coordinate"),
     lon: float = Query(None, description="Longitude coordinate"),
+    exclude_ai: bool = Query(False, description="Exclude AI insights generation"),
     db: Session = Depends(get_db)
 ):
     if not q and (lat is None or lon is None):
@@ -61,8 +62,11 @@ def get_weather_data(
     weather_data["state"] = state
 
     # Add AI weather summary as well on loading
-    ai_insights = AIService.generate_weather_intelligence(weather_data)
-    weather_data["ai_insights"] = ai_insights
+    if not exclude_ai:
+        ai_insights = AIService.generate_weather_intelligence(weather_data)
+        weather_data["ai_insights"] = ai_insights
+    else:
+        weather_data["ai_insights"] = None
 
     return weather_data
 

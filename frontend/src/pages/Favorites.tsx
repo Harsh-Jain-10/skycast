@@ -24,7 +24,7 @@ export const Favorites: React.FC<FavoritesProps> = ({ onSelectCity }) => {
         const weatherPromises = data.map(async (city: FavoriteCityResponse) => {
           try {
             const wRes = await fetch(
-              `http://localhost:8000/api/weather?lat=${city.latitude}&lon=${city.longitude}&q=${encodeURIComponent(city.name)}`
+              `http://localhost:8000/api/weather?lat=${city.latitude}&lon=${city.longitude}&q=${encodeURIComponent(city.name)}&exclude_ai=true`
             );
             if (wRes.ok) {
               const wData = await wRes.json();
