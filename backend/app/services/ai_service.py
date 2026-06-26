@@ -12,92 +12,126 @@ class AIService:
             import os
             api_key = os.getenv("GEMINI_API_KEY", "")
             
-        if not api_key:
-            return AIService.get_fallback_intelligence(weather_data)
-            
-        try:
-            # Initialize the modern google-genai client
-            client = genai.Client(api_key=api_key)
-            
-            # Extract main components for cleaner LLM context
-            current = weather_data.get("current", {})
-            daily = weather_data.get("daily", [])
-            air = weather_data.get("air_quality", {})
-            
-            prompt = f"""
-            Analyze the weather metrics and forecast to produce a comprehensive weather report.
-            
-            City: {weather_data.get('city_name', 'Unknown')}
-            Current Metrics:
-            - Temperature: {current.get('temperature')}°C (Feels like: {current.get('feels_like')}°C)
-            - Humidity: {current.get('humidity')}%
-            - Wind: {current.get('wind_speed')} m/s
-            - Description: {current.get('description')}
-            - UV Index: {current.get('uv_index')}
-            - Air Quality Index (US AQI): {air.get('us_aqi')} ({air.get('quality_label')})
-            
-            7-Day Forecast:
-            {json.dumps([{ 'date': d.get('date'), 'temp_range': f"{d.get('temperature_min')} to {d.get('temperature_max')}°C", 'desc': d.get('description') } for d in daily[:4]], indent=2)}
+        current = weather_data.get("current", {})
+        daily = weather_data.get("daily", [])
+        air = weather_data.get("air_quality", {})
+        
+        prompt = f"""
+        Analyze the weather metrics and forecast to produce a comprehensive weather report.
+        
+        City: {weather_data.get('city_name', 'Unknown')}
+        Current Metrics:
+        - Temperature: {current.get('temperature')}°C (Feels like: {current.get('feels_like')}°C)
+        - Humidity: {current.get('humidity')}%
+        - Wind: {current.get('wind_speed')} m/s
+        - Description: {current.get('description')}
+        - UV Index: {current.get('uv_index')}
+        - Air Quality Index (US AQI): {air.get('us_aqi')} ({air.get('quality_label')})
+        
+        7-Day Forecast:
+        {json.dumps([{ 'date': d.get('date'), 'temp_range': f"{d.get('temperature_min')} to {d.get('temperature_max')}°C", 'desc': d.get('description') } for d in daily[:4]], indent=2)}
 
-            Output a valid JSON object matching the schema below.
-            Do not wrap in markdown quotes, return ONLY the raw JSON string:
-            {{
-                "summary": "Natural language summary of today's conditions and forecast trends.",
-                "clothing_suggestion": ["Specific clothing item 1", "Specific clothing item 2", "Accessories based on UV/rain/wind"],
-                "outdoor_activities": {{
-                    "Running": "Excellent/Good/Fair/Poor based on weather",
-                    "Cycling": "Excellent/Good/Fair/Poor based on wind and wetness",
-                    "Hiking": "Excellent/Good/Fair/Poor based on conditions",
-                    "Golf": "Excellent/Good/Fair/Poor"
-                }},
-                "travel_advice": "Commuting or long-distance travel safety recommendations.",
-                "agricultural_tips": "Watering, planting, or harvesting insights based on rain and humidity.",
-                "cycling_running_conditions": "More details about traction, wind drag, or temperature considerations for cardio activities.",
-                "insights": [
-                    "Technical insight 1 (e.g. pressure change, wind chill, humidity impact)",
-                    "Technical insight 2"
-                ]
-            }}
-            """
-            
-            response = client.models.generate_content(
-                model="gemini-3-flash-preview",
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    response_schema=types.Schema(
-                        type=types.Type.OBJECT,
-                        properties={
-                            "summary": types.Schema(type=types.Type.STRING),
-                            "clothing_suggestion": types.Schema(
-                                type=types.Type.ARRAY,
-                                items=types.Schema(type=types.Type.STRING)
-                            ),
-                            "outdoor_activities": types.Schema(
-                                type=types.Type.OBJECT,
-                                additional_properties=types.Schema(type=types.Type.STRING)
-                            ),
-                            "travel_advice": types.Schema(type=types.Type.STRING),
-                            "agricultural_tips": types.Schema(type=types.Type.STRING),
-                            "cycling_running_conditions": types.Schema(type=types.Type.STRING),
-                            "insights": types.Schema(
-                                type=types.Type.ARRAY,
-                                items=types.Schema(type=types.Type.STRING)
-                            )
-                        },
-                        required=[
-                            "summary", "clothing_suggestion", "outdoor_activities", 
-                            "travel_advice", "agricultural_tips", "cycling_running_conditions", "insights"
-                        ]
+        Output a valid JSON object matching the schema below.
+        Do not wrap in markdown quotes, return ONLY the raw JSON string:
+        {{
+            "summary": "Natural language summary of today's conditions and forecast trends.",
+            "clothing_suggestion": ["Specific clothing item 1", "Specific clothing item 2", "Accessories based on UV/rain/wind"],
+            "outdoor_activities": {{
+                "Running": "Excellent/Good/Fair/Poor based on weather",
+                "Cycling": "Excellent/Good/Fair/Poor based on wind and wetness",
+                "Hiking": "Excellent/Good/Fair/Poor based on conditions",
+                "Golf": "Excellent/Good/Fair/Poor"
+            }},
+            "travel_advice": "Commuting or long-distance travel safety recommendations.",
+            "agricultural_tips": "Watering, planting, or harvesting insights based on rain and humidity.",
+            "cycling_running_conditions": "More details about traction, wind drag, or temperature considerations for cardio activities.",
+            "insights": [
+                "Technical insight 1 (e.g. pressure change, wind chill, humidity impact)",
+                "Technical insight 2"
+            ]
+        }}
+        """
+
+        # 1. Try Gemini
+        if api_key:
+            try:
+                # Initialize the modern google-genai client
+                client = genai.Client(api_key=api_key)
+                
+                response = client.models.generate_content(
+                    model="gemini-3-flash-preview",
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        response_schema=types.Schema(
+                            type=types.Type.OBJECT,
+                            properties={
+                                "summary": types.Schema(type=types.Type.STRING),
+                                "clothing_suggestion": types.Schema(
+                                    type=types.Type.ARRAY,
+                                    items=types.Schema(type=types.Type.STRING)
+                                ),
+                                "outdoor_activities": types.Schema(
+                                    type=types.Type.OBJECT,
+                                    additional_properties=types.Schema(type=types.Type.STRING)
+                                ),
+                                "travel_advice": types.Schema(type=types.Type.STRING),
+                                "agricultural_tips": types.Schema(type=types.Type.STRING),
+                                "cycling_running_conditions": types.Schema(type=types.Type.STRING),
+                                "insights": types.Schema(
+                                    type=types.Type.ARRAY,
+                                    items=types.Schema(type=types.Type.STRING)
+                                )
+                            },
+                            required=[
+                                "summary", "clothing_suggestion", "outdoor_activities", 
+                                "travel_advice", "agricultural_tips", "cycling_running_conditions", "insights"
+                            ]
+                        )
                     )
                 )
-            )
+                return json.loads(response.text)
+            except Exception as e:
+                logging.error(f"Gemini API failure, trying Groq fallback: {e}")
+
+        # 2. Try Groq
+        groq_key = settings.GROQ_API_KEY
+        if not groq_key:
+            import os
+            groq_key = os.getenv("GROQ_API_KEY", "")
             
-            return json.loads(response.text)
-            
-        except Exception as e:
-            logging.error(f"Gemini API failure: {e}")
-            return AIService.get_fallback_intelligence(weather_data)
+        if groq_key:
+            try:
+                import requests
+                headers = {
+                    "Authorization": f"Bearer {groq_key}",
+                    "Content-Type": "application/json"
+                }
+                payload = {
+                    "model": settings.GROQ_MODEL,
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You are Skycast, an elite AI weather forecaster. Analyze weather data and return ONLY a JSON object matching the requested schema."
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
+                    "response_format": {"type": "json_object"}
+                }
+                res = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers, timeout=10)
+                if res.status_code == 200:
+                    content = res.json()["choices"][0]["message"]["content"]
+                    return json.loads(content)
+                else:
+                    logging.error(f"Groq API error response: {res.status_code} {res.text}")
+            except Exception as ex:
+                logging.error(f"Groq API failure, trying rule-based fallback: {ex}")
+
+        # 3. Fallback to rule-based intelligence
+        return AIService.get_fallback_intelligence(weather_data)
 
     @staticmethod
     def get_fallback_intelligence(weather_data: dict) -> dict:

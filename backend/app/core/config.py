@@ -6,6 +6,8 @@ class Settings(BaseSettings):
     
     # API Keys
     GEMINI_API_KEY: str = ""
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
     OPENWEATHERMAP_API_KEY: str = ""
     
     # Database
