@@ -82,67 +82,67 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearch, onLocationSearch }) =>
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-panel border-b border-white/5 bg-slate-950/20 backdrop-blur-md px-4 md:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
-      {/* Brand Logo */}
-      <Link to="/" className="flex items-center gap-2 group">
-        <div className="bg-blue-600/30 p-2.5 rounded-2xl border border-blue-500/20 group-hover:scale-105 transition-transform duration-300">
-          <CloudRain className="w-5 h-5 text-blue-400 group-hover:animate-bounce" />
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 glass-panel border border-white/8 bg-slate-950/45 backdrop-blur-xl rounded-2xl px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl transition-all duration-300">
+      
+      {/* Brand logo */}
+      <Link to="/" className="flex items-center gap-2 group shrink-0">
+        <div className="bg-white/4 p-2 rounded-xl border border-white/10 group-hover:bg-white/8 transition-colors duration-300">
+          <CloudRain className="w-4.5 h-4.5 text-white" />
         </div>
         <div className="flex flex-col">
-          <span className="text-lg font-bold text-white tracking-wide font-sans">Skycast</span>
-          <span className="text-[10px] text-slate-400 tracking-widest font-mono uppercase">AI Weather Intel</span>
+          <span className="text-sm font-black text-white tracking-wider font-display uppercase">Skycast</span>
+          <span className="text-[9px] text-slate-400 tracking-widest font-mono uppercase font-semibold">Intelligence</span>
         </div>
       </Link>
 
-      {/* Global Search Bar with Autocomplete Dropdown */}
+      {/* Global Search form with input focus expansion */}
       <form onSubmit={handleFormSubmit} className="relative w-full max-w-md" ref={dropdownRef}>
         <div className="relative">
           <input
             type="text"
-            placeholder="Search for cities..."
+            placeholder="Search city, coordinates..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
               setShowDropdown(true);
             }}
             onFocus={() => setShowDropdown(true)}
-            className="w-full pl-11 pr-24 py-2.5 bg-white/5 border border-white/8 text-white placeholder-slate-400 rounded-2xl outline-none focus:bg-white/8 focus:border-blue-500/40 text-sm tracking-wide transition-all"
+            className="w-full pl-10 pr-20 py-2 bg-white/2 border border-white/5 text-white placeholder-slate-400 rounded-xl outline-none focus:bg-white/5 focus:border-white/20 text-xs tracking-wide transition-all duration-300"
           />
-          <Search className="absolute left-4 top-3 h-4.5 w-4.5 text-slate-400" />
+          <Search className="absolute left-3.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
           
-          {/* Location Request Button inside Input */}
           <button
             type="button"
             onClick={triggerGeolocation}
-            className="absolute right-2.5 top-1.5 p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors duration-200"
+            className="absolute right-2 top-1.5 p-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors duration-200"
             title="Use current location"
           >
-            <Navigation className="w-4 h-4" />
+            <Navigation className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Suggestions Dropdown */}
+        {/* Dropdown lists */}
         {showDropdown && (query.trim().length >= 2 || suggestions.length > 0) && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900/95 border border-slate-800 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl z-50">
+          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-950/95 border border-white/8 backdrop-blur-2xl rounded-2xl overflow-hidden shadow-2xl z-50 animate-fade-in">
             {loadingSuggestions && (
-              <div className="p-4 text-xs text-slate-400 text-center animate-pulse">Querying geocoding registry...</div>
+              <div className="p-3 text-[10px] text-slate-400 text-center animate-pulse font-mono uppercase tracking-widest">Querying Geocoding Registry...</div>
             )}
             {!loadingSuggestions && suggestions.length === 0 && (
-              <div className="p-4 text-xs text-slate-400 text-center">No cities found. Try another query.</div>
+              <div className="p-3 text-[10px] text-slate-400 text-center font-mono">No locations registered.</div>
             )}
             {!loadingSuggestions && suggestions.map((item, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => handleSuggestClick(item)}
-                className="w-full px-4 py-3 text-left text-sm text-slate-200 hover:bg-white/5 flex items-center justify-between border-b border-slate-800 last:border-0 transition-colors"
+                className="w-full px-4 py-2.5 text-left text-xs text-slate-200 hover:bg-white/3 flex items-center justify-between border-b border-white/5 last:border-0 transition-colors"
               >
-                <div className="flex items-center gap-2.5">
-                  <MapPin className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span className="font-semibold text-white">{item.name}</span>
-                  {item.admin1 && <span className="text-slate-400 text-xs">{item.admin1}</span>}
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <span className="font-bold text-white">{item.name}</span>
+                  {item.admin1 && <span className="text-slate-400 text-[10px]">{item.admin1}</span>}
                 </div>
-                <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-md text-slate-400 font-medium">
+                <span className="text-[9px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400 font-mono">
                   {item.country_code}
                 </span>
               </button>
@@ -151,41 +151,41 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearch, onLocationSearch }) =>
         )}
       </form>
 
-      {/* Pages Navigation Controls */}
-      <nav className="flex items-center gap-2">
+      {/* Router Links */}
+      <nav className="flex items-center gap-1.5 shrink-0">
         <Link
           to="/"
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+          className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
             location.pathname === "/"
-              ? "bg-blue-600/20 border border-blue-500/20 text-blue-400"
-              : "text-slate-400 hover:bg-white/5 hover:text-white"
+              ? "bg-white/5 border border-white/10 text-white shadow-inner"
+              : "text-slate-400 hover:text-white"
           }`}
         >
-          <BarChart3 className="w-4 h-4" />
+          <BarChart3 className="w-3.5 h-3.5" />
           <span>Dashboard</span>
         </Link>
         
         <Link
           to="/favorites"
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+          className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
             location.pathname === "/favorites"
-              ? "bg-blue-600/20 border border-blue-500/20 text-blue-400"
-              : "text-slate-400 hover:bg-white/5 hover:text-white"
+              ? "bg-white/5 border border-white/10 text-white shadow-inner"
+              : "text-slate-400 hover:text-white"
           }`}
         >
-          <Heart className="w-4 h-4" />
+          <Heart className="w-3.5 h-3.5" />
           <span>Favorites</span>
         </Link>
 
         <Link
           to="/compare"
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+          className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
             location.pathname === "/compare"
-              ? "bg-blue-600/20 border border-blue-500/20 text-blue-400"
-              : "text-slate-400 hover:bg-white/5 hover:text-white"
+              ? "bg-white/5 border border-white/10 text-white shadow-inner"
+              : "text-slate-400 hover:text-white"
           }`}
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-3.5 h-3.5" />
           <span>Compare</span>
         </Link>
       </nav>

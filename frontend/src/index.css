@@ -1,14 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-fade-in: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-up: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-rotate-slow: spin 20s linear infinite;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
   
   @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
     from {
       opacity: 0;
-      transform: translateY(16px) scale(0.98);
+      transform: translateY(24px) scale(0.99);
     }
     to {
       opacity: 1;
@@ -16,19 +24,251 @@
     }
   }
   @keyframes float {
-    0%, 100% {
-      transform: translateY(0px) rotate(0deg);
-    }
-    50% {
-      transform: translateY(-8px) rotate(1deg);
-    }
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(0.5deg); }
   }
 }
 
-/* Custom Scrollbar */
+/* Base Body System Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: #030712;
+  font-family: var(--font-sans);
+}
+
+/* --- ADAPTIVE WEATHER COLOR THEMES --- */
+.theme-clear-day {
+  --bg-gradient: radial-gradient(circle at top right, #1d4ed8 0%, #1e3a8a 50%, #030712 100%);
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.07);
+  --card-glow: rgba(245, 158, 11, 0.05);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --accent: #f59e0b;
+  --accent-rgb: 245, 158, 11;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.theme-clear-night {
+  --bg-gradient: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+  --card-bg: rgba(255, 255, 255, 0.015);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --card-glow: rgba(129, 140, 248, 0.03);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  --accent: #818cf8;
+  --accent-rgb: 129, 140, 248;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+}
+
+.theme-cloudy-day {
+  --bg-gradient: radial-gradient(circle at top right, #334155 0%, #1e293b 60%, #0f172a 100%);
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-glow: rgba(148, 163, 184, 0.03);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --accent: #94a3b8;
+  --accent-rgb: 148, 163, 184;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.theme-cloudy-night {
+  --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%, #020617 100%);
+  --card-bg: rgba(255, 255, 255, 0.015);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --card-glow: rgba(71, 85, 105, 0.03);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  --accent: #475569;
+  --accent-rgb: 71, 85, 105;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+}
+
+.theme-rainy {
+  --bg-gradient: radial-gradient(circle at top right, #111827 0%, #0f172a 50%, #020617 100%);
+  --card-bg: rgba(15, 23, 42, 0.25);
+  --card-border: rgba(255, 255, 255, 0.04);
+  --card-glow: rgba(56, 189, 248, 0.03);
+  --text-primary: #f8fafc;
+  --text-secondary: rgba(248, 250, 252, 0.55);
+  --accent: #38bdf8;
+  --accent-rgb: 56, 189, 248;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+.theme-thunderstorm {
+  --bg-gradient: radial-gradient(circle at top right, #090d16 0%, #030712 70%, #020408 100%);
+  --card-bg: rgba(17, 24, 39, 0.35);
+  --card-border: rgba(255, 255, 255, 0.04);
+  --card-glow: rgba(168, 85, 247, 0.04);
+  --text-primary: #f9fafb;
+  --text-secondary: rgba(249, 250, 251, 0.5);
+  --accent: #a855f7;
+  --accent-rgb: 168, 85, 247;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+}
+
+.theme-snowy {
+  --bg-gradient: radial-gradient(circle at top right, #334155 0%, #1e293b 60%, #0f172a 100%);
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.07);
+  --card-glow: rgba(186, 230, 253, 0.04);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --accent: #bae6fd;
+  --accent-rgb: 186, 230, 253;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.theme-foggy {
+  --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%, #030712 100%);
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --card-glow: rgba(203, 213, 225, 0.02);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --accent: #cbd5e1;
+  --accent-rgb: 203, 213, 225;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Apply theme transition globally */
+.relative {
+  transition: background 1.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* --- PREMIUM CARD DESIGN (APPLE / LINEAR STYLE) --- */
+.premium-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(24px) saturate(110%);
+  -webkit-backdrop-filter: blur(24px) saturate(110%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s ease, 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.3), var(--card-glow);
+}
+
+/* Glass inputs */
+.premium-input {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-input:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.03);
+}
+
+/* --- ATMOSPHERIC & KINETIC ANIMATIONS --- */
+
+/* Twisted drifting realistic clouds */
+.cloud-drift-1 {
+  position: absolute;
+  top: 10%;
+  left: -50%;
+  width: 150%;
+  height: 40%;
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: drift-slow 120s linear infinite;
+}
+
+.cloud-drift-2 {
+  position: absolute;
+  top: 30%;
+  right: -50%;
+  width: 140%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%);
+  filter: blur(60px);
+  animation: drift-reverse 150s linear infinite;
+}
+
+@keyframes drift-slow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes drift-reverse {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Sun Rays Rotation Effect */
+.sun-ray-container {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  pointer-events: none;
+  opacity: 0.12;
+  filter: blur(20px);
+}
+
+.sun-ray {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(245, 158, 11, 0.3) 120deg, transparent 240deg);
+  border-radius: 50%;
+  animation: spin 30s linear infinite;
+}
+
+/* Twinkling star glow */
+.twinkle-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -36,145 +276,19 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Glassmorphism Styles */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Scrollbar Hide class */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
-
-.glass-panel:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
-}
-
-.glass-panel-dark {
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(20px) saturate(100%);
-  -webkit-backdrop-filter: blur(20px) saturate(100%);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-panel-dark:hover {
-  background: rgba(15, 23, 42, 0.55);
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
-}
-
-.glass-input {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9999px;
-  color: white;
-  outline: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.glass-input:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
-}
-
-/* Custom Gradients and Sky Themes */
-.sky-clear {
-  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #60a5fa 100%);
-}
-
-.sky-clear-night {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-}
-
-.sky-cloudy {
-  background: linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%);
-}
-
-.sky-cloudy-night {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
-
-.sky-rainy {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
-}
-
-.sky-thunderstorm {
-  background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1f2937 100%);
-}
-
-.sky-snowy {
-  background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #cbd5e1 100%);
-}
-
-/* Moving clouds overlay */
-.cloud-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.15;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300"><path d="M50 150 C20 130 10 90 40 70 C50 60 70 60 80 70 C100 50 140 50 160 75 C180 60 210 70 210 95 C230 95 240 115 230 130 C220 145 190 150 170 150 Z" fill="white"/></svg>');
-  animation: move-clouds 90s linear infinite;
-}
-
-@keyframes move-clouds {
-  from { background-position: 0 0; }
-  to { background-position: 1000px 0; }
-}
-
-/* Rain Effect */
-.rain-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  opacity: 0.25;
-}
-
-.rain-drop {
-  position: absolute;
-  background: linear-gradient(transparent, #ffffff);
-  width: 1px;
-  height: 60px;
-  opacity: 0.7;
-  animation: fall 1s linear infinite;
-}
-
-@keyframes fall {
-  from { transform: translateY(-100px); }
-  to { transform: translateY(120vh); }
-}
-
-/* Lightening overlay */
-.lightning-flash {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: white;
-  opacity: 0;
-  animation: flash 6s infinite;
-}
-
-@keyframes flash {
-  0%, 95%, 100% { opacity: 0; }
-  96% { opacity: 0.8; }
-  97% { opacity: 0.2; }
-  98% { opacity: 0.9; }
-  99% { opacity: 0; }
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

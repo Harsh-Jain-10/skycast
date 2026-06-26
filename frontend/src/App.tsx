@@ -154,9 +154,25 @@ const App: React.FC = () => {
   const weatherCode = weather?.current?.weather_code ?? 0;
   const isDay = weather?.current?.is_day === 1;
 
+  let themeClass = "theme-clear-day";
+  if (!isDay) {
+    themeClass = "theme-clear-night";
+  }
+  if ([2, 3].includes(weatherCode)) {
+    themeClass = isDay ? "theme-cloudy-day" : "theme-cloudy-night";
+  } else if ([45, 48].includes(weatherCode)) {
+    themeClass = "theme-foggy";
+  } else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(weatherCode)) {
+    themeClass = "theme-rainy";
+  } else if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+    themeClass = "theme-snowy";
+  } else if ([95, 96, 99].includes(weatherCode)) {
+    themeClass = "theme-thunderstorm";
+  }
+
   return (
     <Router>
-      <div className="relative min-h-screen text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden pb-12">
+      <div className={`relative min-h-screen text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden pb-12 ${themeClass}`}>
         {/* Dynamic Canvas / Color Background */}
         <WeatherBackground weatherCode={weatherCode} isDay={isDay} />
         

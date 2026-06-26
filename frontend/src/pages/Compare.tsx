@@ -8,7 +8,6 @@ export const Compare: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCompareData = async () => {
-    // Filter out empty search queries
     const activeQueries = inputs.filter((q) => q.trim().length > 0);
     if (activeQueries.length < 2) {
       setError("Please specify at least two cities to compare.");
@@ -42,30 +41,30 @@ export const Compare: React.FC = () => {
   };
 
   const removeInput = (idx: number) => {
-    if (inputs.length <= 2) return; // Keep at least 2 inputs
+    if (inputs.length <= 2) return;
     const newInputs = inputs.filter((_, i) => i !== idx);
     setInputs(newInputs);
     
-    // Also remove from datasets if fetched
     if (citiesData[idx]) {
       setCitiesData(citiesData.filter((_, i) => i !== idx));
     }
   };
 
   const addInput = () => {
-    if (inputs.length >= 3) return; // Support comparing max 3 cities
+    if (inputs.length >= 3) return;
     setInputs([...inputs, ""]);
   };
 
   return (
-    <div className="flex-1 px-4 md:px-8 py-6 max-w-7xl mx-auto w-full animate-fade-in">
+    <div className="flex-1 w-full pt-28 px-4 md:px-8 space-y-8 max-w-7xl mx-auto animate-fade-in pb-16">
       <div className="flex flex-col gap-1 mb-8">
-        <h1 className="text-2xl font-black text-white tracking-wide">City Comparison Matrix</h1>
+        <span className="text-[10px] font-bold text-slate-400 tracking-widest font-mono uppercase">Metrics System</span>
+        <h1 className="text-3xl font-extrabold text-white tracking-wide font-display mt-0.5">City Comparison Matrix</h1>
         <p className="text-xs text-slate-400 font-medium">Compare live meteorological metrics and forecasts side-by-side</p>
       </div>
 
       {/* Inputs selectors */}
-      <div className="glass-panel p-6 rounded-3xl mb-8 flex flex-col gap-4">
+      <div className="premium-card p-6 mb-8 flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {inputs.map((input, idx) => (
             <div key={idx} className="relative flex items-center">
@@ -75,7 +74,7 @@ export const Compare: React.FC = () => {
                 placeholder={`Enter City ${idx + 1}`}
                 value={input}
                 onChange={(e) => handleInputChange(idx, e.target.value)}
-                className="w-full pl-11 pr-10 py-2.5 bg-white/5 border border-white/8 text-white placeholder-slate-400 rounded-2xl outline-none focus:bg-white/8 focus:border-blue-500/40 text-sm transition-all"
+                className="w-full pl-11 pr-10 py-3 bg-white/2 border border-white/5 text-white placeholder-slate-400 rounded-2xl outline-none focus:bg-white/5 focus:border-white/20 text-xs transition-all"
               />
               {inputs.length > 2 && (
                 <button
@@ -94,7 +93,7 @@ export const Compare: React.FC = () => {
           {inputs.length < 3 && (
             <button
               onClick={addInput}
-              className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/5"
+              className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-300 hover:text-white bg-white/3 hover:bg-white/5 rounded-xl transition-all border border-white/5"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add City</span>
@@ -104,7 +103,7 @@ export const Compare: React.FC = () => {
           <button
             onClick={fetchCompareData}
             disabled={loading}
-            className="flex items-center gap-1.5 px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded-xl shadow-lg transition-all"
+            className="flex items-center gap-1.5 px-5 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded-xl shadow-lg transition-all"
           >
             <BarChart3 className="w-3.5 h-3.5" />
             <span>{loading ? "Comparing..." : "Compare Cities"}</span>
@@ -121,64 +120,64 @@ export const Compare: React.FC = () => {
 
       {/* Comparison results table */}
       {!loading && citiesData.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
           {citiesData.map((data, idx) => {
             const { current, air_quality, daily } = data;
             return (
-              <div key={idx} className="glass-panel p-6 rounded-3xl flex flex-col justify-between border-white/5">
+              <div key={idx} className="premium-card p-6 flex flex-col justify-between border-white/5">
                 {/* Header */}
                 <div className="border-b border-white/5 pb-4 mb-4">
                   <div className="flex items-center gap-1.5">
                     <MapPin className="w-4 h-4 text-blue-400 shrink-0" />
-                    <h2 className="text-xl font-extrabold text-white truncate">{data.city_name}</h2>
+                    <h2 className="text-xl font-extrabold text-white truncate font-display">{data.city_name}</h2>
                   </div>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-widest font-mono font-bold">
-                    {data.country || "GLOBAL"}
+                  <span className="text-[9px] text-slate-500 uppercase tracking-widest font-mono font-bold mt-0.5 block">
+                    {data.country || "Global"}
                   </span>
                 </div>
 
                 {/* Metrics list */}
                 <div className="space-y-4 flex-1">
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Current Temp</span>
-                    <span className="font-extrabold text-white text-xl">{Math.round(current.temperature)}°C</span>
+                    <span className="font-extrabold text-white text-lg font-display">{Math.round(current.temperature)}°C</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Feels Like</span>
                     <span className="font-bold text-slate-200">{Math.round(current.feels_like)}°C</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Conditions</span>
                     <span className="font-bold text-slate-200">{current.description}</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Humidity</span>
                     <span className="font-bold text-slate-200">{current.humidity}%</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Wind Speed</span>
                     <span className="font-bold text-slate-200">{current.wind_speed} m/s</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">UV Index</span>
                     <span className="font-bold text-yellow-400">{current.uv_index.toFixed(1)}</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Air Quality</span>
                     <span className="font-bold text-emerald-400">{air_quality.us_aqi} AQI ({air_quality.quality_label})</span>
                   </div>
 
                   {/* 3-Day short forecast forecast */}
                   <div className="border-t border-white/5 pt-4 mt-4">
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono mb-2">3-Day Forecast</h4>
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono mb-3">3-Day Forecast</h4>
                     <div className="space-y-2 text-xs">
                       {daily.slice(1, 4).map((day: any, i: number) => (
                         <div key={i} className="flex justify-between items-center text-slate-300">
-                          <span className="font-medium">
+                          <span className="font-semibold text-slate-200">
                             {new Date(day.date).toLocaleDateString("en-US", { weekday: "short" })}
                           </span>
-                          <span className="text-slate-400 text-[11px] truncate max-w-[120px]">{day.description}</span>
-                          <span className="font-bold text-white">
+                          <span className="text-slate-400 text-[11px] truncate max-w-[100px]">{day.description}</span>
+                          <span className="font-bold text-white font-mono">
                             {Math.round(day.temperature_min)}° / {Math.round(day.temperature_max)}°C
                           </span>
                         </div>

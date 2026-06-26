@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface WeatherBackgroundProps {
   weatherCode: number;
@@ -6,124 +6,252 @@ interface WeatherBackgroundProps {
 }
 
 export const WeatherBackground: React.FC<WeatherBackgroundProps> = ({ weatherCode, isDay }) => {
-  const [drops, setDrops] = useState<{ id: number; left: string; delay: string; duration: string }[]>([]);
-  const [flakes, setFlakes] = useState<{ id: number; left: string; delay: string; duration: string; size: string }[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Determine weather type
-  let skyClass = "sky-clear";
+  // WMO categorization
   let isRain = false;
   let isSnow = false;
   let isCloudy = false;
   let isThunder = false;
+  let isFoggy = false;
+  let isClear = false;
 
-  if (!isDay) {
-    skyClass = "sky-clear-night";
-  }
-
-  // WMO Codes categorization
   if (weatherCode === 0 || weatherCode === 1) {
-    skyClass = isDay ? "sky-clear" : "sky-clear-night";
-  } else if (weatherCode === 2 || weatherCode === 3) {
-    skyClass = isDay ? "sky-cloudy" : "sky-cloudy-night";
+    isClear = true;
+  } else if ([2, 3].includes(weatherCode)) {
     isCloudy = true;
   } else if ([45, 48].includes(weatherCode)) {
-    skyClass = "sky-cloudy";
-    isCloudy = true;
+    isFoggy = true;
   } else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(weatherCode)) {
-    skyClass = "sky-rainy";
     isRain = true;
   } else if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
-    skyClass = "sky-snowy";
     isSnow = true;
   } else if ([95, 96, 99].includes(weatherCode)) {
-    skyClass = "sky-thunderstorm";
     isThunder = true;
     isRain = true;
   }
 
-  // Generate rain drops
   useEffect(() => {
-    if (isRain) {
-      const generatedDrops = Array.from({ length: 60 }).map((_, i) => ({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 2}s`,
-        duration: `${0.8 + Math.random() * 0.5}s`,
-      }));
-      setDrops(generatedDrops);
-    } else {
-      setDrops([]);
-    }
-  }, [isRain]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  // Generate snow particles
-  useEffect(() => {
-    if (isSnow) {
-      const generatedFlakes = Array.from({ length: 40 }).map((_, i) => ({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 5}s`,
-        duration: `${3 + Math.random() * 4}s`,
-        size: `${2 + Math.random() * 4}px`,
-      }));
-      setFlakes(generatedFlakes);
-    } else {
-      setFlakes([]);
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    // Handle resizing
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    // Particle Classes
+    class RainDrop {
+      x = Math.random() * width;
+      y = Math.random() * -height;
+      vy = 15 + Math.random() * 10;
+      vx = -2 - Math.random() * 2; // Wind angle
+      len = 15 + Math.random() * 15;
+      opacity = 0.2 + Math.random() * 0.3;
+
+      update() {
+        this.y += this.vy;
+        this.x += this.vx;
+        if (this.y > height) {
+          this.y = -20;
+          this.x = Math.random() * width;
+        }
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+        ctx.strokeStyle = `rgba(174, 219, 255, ${this.opacity})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.vx, this.y + this.len);
+        ctx.stroke();
+      }
     }
-  }, [isSnow]);
+
+    class SnowFlake {
+      x = Math.random() * width;
+      y = Math.random() * -height;
+      r = 1 + Math.random() * 3;
+      d = Math.random() * 100; // Density
+      vy = 1 + Math.random() * 2;
+      vx = Math.sin(Math.random()) * 0.5;
+
+      update(tick: number) {
+        this.y += this.vy;
+        this.x += Math.sin(tick * 0.01 + this.d) * 0.5;
+        if (this.y > height) {
+          this.y = -10;
+          this.x = Math.random() * width;
+        }
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
+        ctx.fill();
+      }
+    }
+
+    class FogBubble {
+      x = Math.random() * width;
+      y = height - Math.random() * 200;
+      r = 100 + Math.random() * 150;
+      vx = 0.1 + Math.random() * 0.15;
+      opacity = 0.03 + Math.random() * 0.05;
+
+      update() {
+        this.x += this.vx;
+        if (this.x - this.r > width) {
+          this.x = -this.r;
+        }
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+        const grad = ctx.createRadialGradient(this.x, this.y, 10, this.x, this.y, this.r);
+        grad.addColorStop(0, `rgba(200, 200, 210, ${this.opacity})`);
+        grad.addColorStop(1, "rgba(200, 200, 210, 0)");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    class Star {
+      x = Math.random() * width;
+      y = Math.random() * (height * 0.6); // Stars only in top 60%
+      r = 0.5 + Math.random() * 1.2;
+      twinkleSpeed = 0.02 + Math.random() * 0.03;
+      phase = Math.random() * Math.PI * 2;
+
+      update() {
+        this.phase += this.twinkleSpeed;
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+        const alpha = 0.15 + (Math.sin(this.phase) + 1) * 0.35;
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Initialize arrays
+    const rainDrops: RainDrop[] = [];
+    const snowFlakes: SnowFlake[] = [];
+    const fogBubbles: FogBubble[] = [];
+    const stars: Star[] = [];
+
+    if (isRain) {
+      for (let i = 0; i < 70; i++) rainDrops.push(new RainDrop());
+    }
+    if (isSnow) {
+      for (let i = 0; i < 60; i++) snowFlakes.push(new SnowFlake());
+    }
+    if (isFoggy) {
+      for (let i = 0; i < 15; i++) fogBubbles.push(new FogBubble());
+    }
+    if (!isDay && (isClear || isCloudy)) {
+      for (let i = 0; i < 80; i++) stars.push(new Star());
+    }
+
+    let tick = 0;
+    let lightningFlash = 0;
+
+    // Animation Loop
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+      tick++;
+
+      // 1. Draw lightning storm flash overlay
+      if (isThunder && Math.random() > 0.985) {
+        lightningFlash = 15; // Set flash duration in ticks
+      }
+
+      if (lightningFlash > 0) {
+        lightningFlash--;
+        if (lightningFlash % 2 === 0) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.12 * (lightningFlash / 15)})`;
+          ctx.fillRect(0, 0, width, height);
+        }
+      }
+
+      // 2. Draw Stars
+      if (!isDay) {
+        stars.forEach((star) => {
+          star.update();
+          star.draw(ctx);
+        });
+      }
+
+      // 3. Draw Fog
+      if (isFoggy) {
+        fogBubbles.forEach((fog) => {
+          fog.update();
+          fog.draw(ctx);
+        });
+      }
+
+      // 4. Draw Rain
+      if (isRain) {
+        rainDrops.forEach((drop) => {
+          drop.update();
+          drop.draw(ctx);
+        });
+      }
+
+      // 5. Draw Snow
+      if (isSnow) {
+        snowFlakes.forEach((flake) => {
+          flake.update(tick);
+          flake.draw(ctx);
+        });
+      }
+
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [weatherCode, isDay, isRain, isSnow, isFoggy, isThunder, isClear]);
 
   return (
-    <div className={`fixed inset-0 -z-10 w-full h-full transition-all duration-1000 ${skyClass}`}>
-      {/* Night stars simulation */}
-      {!isDay && (
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(white_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-      )}
+    <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none overflow-hidden">
+      {/* Sky Base Color layer matching index.css themes */}
+      <div className="absolute inset-0 transition-opacity duration-1000 bg-transparent" />
 
-      {/* Cloud drifts */}
-      {(isCloudy || isRain || isSnow) && <div className="cloud-layer" />}
-
-      {/* Rain simulation */}
-      {isRain && (
-        <div className="rain-container">
-          {drops.map((drop) => (
-            <div
-              key={drop.id}
-              className="rain-drop"
-              style={{
-                left: drop.left,
-                animationDelay: drop.delay,
-                animationDuration: drop.duration,
-              }}
-            />
-          ))}
+      {/* Cinematic Clouds drifting layer */}
+      {(isCloudy || isRain || isSnow || isThunder) && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="cloud-drift-1" />
+          <div className="cloud-drift-2" />
         </div>
       )}
 
-      {/* Snow simulation */}
-      {isSnow && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
-          {flakes.map((flake) => (
-            <div
-              key={flake.id}
-              className="absolute bg-white rounded-full animate-[fall_linear_infinite]"
-              style={{
-                left: flake.left,
-                animationDelay: flake.delay,
-                animationDuration: flake.duration,
-                width: flake.size,
-                height: flake.size,
-                top: "-10px",
-              }}
-            />
-          ))}
+      {/* Sun glow effect for clear day */}
+      {isDay && isClear && (
+        <div className="sun-ray-container">
+          <div className="sun-ray" />
         </div>
       )}
 
-      {/* Thunderstorm lightning simulation */}
-      {isThunder && <div className="lightning-flash" />}
-
-      {/* Ambient gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/10" />
+      {/* Particle Canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
     </div>
   );
 };
