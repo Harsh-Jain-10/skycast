@@ -1,54 +1,6 @@
-# 🌦️ SkyCast — AI Weather Intelligence Platform
+# SkyCast — AI Weather Intelligence Platform
 
-<div align="center">
-
-<!-- Gradient Line Spacer -->
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/gradient.png" width="100%" height="4px" />
-
-<br />
-
-<!-- Animated Project Logo/Title -->
-<h1><code>SKYCAST</code></h1>
-<h3>Cinematic AI Weather Intelligence Platform</h3>
-<p><i>An award-winning, premium meteorological dashboard featuring live canvas-based atmospheric physics and LLM-powered insights.</i></p>
-
-<br />
-
-<!-- Row of Animated Weather SVGs representing atmospheric conditions -->
-<div align="center">
-  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/clear-day.svg" width="75" alt="Clear Day" />
-  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/cloudy.svg" width="75" alt="Cloudy" />
-  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/rain.svg" width="75" alt="Rain" />
-  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/thunderstorms.svg" width="75" alt="Thunderstorms" />
-  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/snow.svg" width="75" alt="Snow" />
-  <img src="https://raw.githubusercontent.com/basmilius/meteocons/master/production/svg/fill/all/wind.svg" width="75" alt="Wind" />
-</div>
-
-<br />
-
-<!-- Badges Grid -->
-[![GitHub Version](https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge&logo=git&logoColor=white)](https://github.com/Harsh-Jain-10/skycast)
-[![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge&logo=open-source-initiative&logoColor=white)](https://github.com/Harsh-Jain-10/skycast/blob/main/LICENSE)
-[![Stars](https://img.shields.io/github/stars/Harsh-Jain-10/skycast?style=for-the-badge&color=gold&logo=github)](https://github.com/Harsh-Jain-10/skycast/stargazers)
-[![Issues](https://img.shields.io/github/issues/Harsh-Jain-10/skycast?style=for-the-badge&color=red&logo=git-lfs)](https://github.com/Harsh-Jain-10/skycast/issues)
-[![Last Commit](https://img.shields.io/github/last-commit/Harsh-Jain-10/skycast?style=for-the-badge&logo=gitkraken&logoColor=white)](https://github.com/Harsh-Jain-10/skycast/commits/main)
-
-<br />
-
-[![React 19](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![Gemini AI](https://img.shields.io/badge/Gemini_AI-8E44AD?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev)
-
-<br />
-
-<!-- Feature Badges -->
-<img src="https://img.shields.io/badge/AI--Powered-Yes-FF69B4?style=flat-square" alt="AI Powered" /> • <img src="https://img.shields.io/badge/Responsive-Yes-blueviolet?style=flat-square" alt="Responsive" /> • <img src="https://img.shields.io/badge/Physics--Engine-60FPS%20Canvas-orange?style=flat-square" alt="Physics Engine" /> • <img src="https://img.shields.io/badge/Cache--Database-SQLite-lightgrey?style=flat-square" alt="SQLite Cache" />
-
-<br />
-<br />
-
-</div>
+An award-winning, premium meteorological dashboard featuring live canvas-based atmospheric physics and LLM-powered insights.
 
 ---
 
@@ -76,10 +28,10 @@ By integrating a dual-engine AI pipeline (Gemini / Groq) with caching mechanisms
 
 ## 🚀 Live Demo & Links
 
-*   **Live Dashboard Web Interface**: `http://localhost:5173` *(Local)*
+*   **Live Dashboard Web Interface**: [http://localhost:5173](http://localhost:5173) *(Local)*
 *   **FastAPI Documentation**: [Swagger Web Interface](http://localhost:8000/docs)
 *   **Weather Provider**: [Open-Meteo API](https://open-meteo.com)
-*   **Source Code Repository**: [GitHub Repository Link](https://github.com/Harsh-Jain-10/skycast)
+*   **Source Code Repository**: [GitHub Repository](https://github.com/Harsh-Jain-10/skycast)
 
 ---
 
@@ -230,27 +182,17 @@ Distributed under the MIT License. See [LICENSE](https://github.com/Harsh-Jain-1
 
 ---
 
-<div align="center">
-
 ## 🌟 Crafted with Precision by Harsh Jain
 
 Thank you for exploring **SkyCast**! This project represents my dedication to engineering high-performance, visually stunning software interfaces and integrating modern generative AI models into elegant user workflows.
 
-<br />
+### Contact & Links
+*   [GitHub Profile](https://github.com/Harsh-Jain-10)
+*   [LinkedIn](https://www.linkedin.com/in/harsh-jain-10/)
+*   [Email Contact](mailto:harsh.jainm1003@gmail.com)
 
-<!-- Interactive Contact Badges -->
-[![GitHub Profile](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Harsh-Jain-10)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/harsh-jain-10/)
-[![Email Contact](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:harsh.jainm1003@gmail.com)
+---
 
-<br />
+Built with passion for modern software engineering, artificial intelligence, and beautiful user experiences.
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/gradient.png" width="100%" height="4px" />
-
-<br />
-<p align="center" style="font-size: 11px; color: #64748b;">
-Built with passion for modern software engineering, artificial intelligence, and beautiful user experiences.<br />
-<a href="#-skycast--ai-weather-intelligence-platform">Back to Top</a>
-</p>
-
-</div>
+[Back to Top](#skycast--ai-weather-intelligence-platform)
